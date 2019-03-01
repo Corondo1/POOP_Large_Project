@@ -1,0 +1,223 @@
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--This meta tag scales the page on mobile-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<!--This is the link to the CSS styles that will run on this page-->
+		<link rel="stylesheet" href="styles.css">
+		<!--This is the link to the scripts that will run on this page-->
+		<script src = "scripts.js"></script>
+		<!--This is the link to the JQuery Library
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+		<!--Get the users rank to determine their permissions-->
+		<!--
+		<script>
+			var user_rank = {username:"users_username"};
+			var user_rank_to_json = JSON.stringify(user_rank);
+			xmlhttp.open("POST", "the_php_file.php", true);
+			xmlhttp:setRequestHeader("user_rank", "username");
+			xmlhttp.send(user_rank_to_json);
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					// Make the response into a string
+					var variable = JSON.parse(this.responseText);
+					// Give the string to the permissions function to determine whats shown
+					permissions(variable.rank);
+				}
+			}
+		</script>-->
+	</head>
+	<body>
+		<div class="banner">
+			<h3>
+				Links to parts of the page like login and stuff go here
+			</h3>
+			<div>
+				<input id="banner_home_button" type="button" value="Main Page" onclick="main_page.html"/>
+				<input id="login_button" type="button" value="Login" onclick="login.html"/>
+				<input id="signup_button" type="button" value="Sign Up" onclick="signup.html"/>
+			</div>
+		</div>
+		<!--
+		<div class="logo">
+			<img src="Horde1.jpg">
+		</div>
+	-->
+		<div class="left_panel">
+			left panel
+			<div>
+				<input id="left_panel_home_button" type="button" value="Main Page" onclick="main_page.html"/>
+				<input id="contents_button" type="button" value="Contents" onclick="contents.html"/>
+			</div>
+		</div>
+
+		<div class="main_body">
+			<!--This is the part that will make the body section editable using the "contenteditable" attribute-->
+			<!--The ID attribute is for the javascript function -->
+			<header>
+				<h1 id="main_header">Main Header</h1>
+				<input id="edit_button" class="user_member user_admin_exec" type="button" value="edit" onclick="editHeader()" style="display:none;"/>
+			</header>
+
+			<div>
+				<p id="main_header_section">Main header section.</p>
+			</div>
+			<div id="contents_box">
+				<div>
+					<h3 id="contents">Contents</h3>
+				</div>
+				<ol id="content_list">
+					<!-- Content List Layout (# = Section number)
+					<li id="contets_li#"">
+						<span id="contents_span#">
+							<a id="contents_href#" href="#section_header#" >
+								Section Title
+							</a>
+						</span>
+					</li>
+				-->
+					<!--This script will send a request to the server for the section information-->
+					<script>
+						var contents_li#, contents_span#, contents_href_id, contents_list_href;
+						var contents_list_text, txt, i;
+
+						var xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function()
+						{
+						  if (this.readyState == 4 && this.status == 200)
+						  {
+						    var content_list_sections = JSON.parse(this.responseText);
+								for (i in content_list_sections.sections)
+								{
+									contents_li# = content_list_sections.sections[i].contents_li_id;
+									contents_span# = content_list_sections.sections[i].contents_span_id;
+									contents_href_id = content_list_sections.sections[i].contents_a_id;
+									contents_list_href = content_list_sections.sections[i].contents_a_href;
+									contents_list_text = content_list_sections.sections[i].contents_section_title;
+									txt =
+										`<li id="${contets_li#}">
+											<span id="${contents_span#}">
+												<a id="${contents_href_id}" href="${contents_list_href}">${contents_list_text}</a>
+											</span>
+										</li>`
+								}
+								document.getElementById("content_list").appendChild(txt);
+							}
+						};
+						xmlhttp.open("GET", "whatever_the_php_file_is_called.php", true);
+						xmlhttp.send();
+					</script>
+				</ol>
+			</div>
+
+			<div id="main_content">
+				<!-- Content Layout (# = Section number)
+				<header id="header#">
+					<h2 id="section_header#" class="edit_section">
+						Section Header
+					</h2>
+					<input id="edit_button#" class="edit_button user_member user_admin_exec" type="button" value="edit" onclick="editSection(#)" style="display:none;"/>
+				</header>
+				<div id="div#">
+					<p id="p#" class="edit_section">
+						New Section Content
+					</p>
+				</div>
+				-->
+				<!--This script will send a request to the server for the section information-->
+				<script>
+					var header#, section_header#, h2_classes, section_header_text, edit_button#;
+					var edit_button_class, input_edit_type, input_edit_value, input_edit_onclick;
+					var input_edit_style, div#, p#, p_classes, section_text, txt, i;
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function()
+					{
+					  if (this.readyState == 4 && this.status == 200)
+					  {
+					    var main_sections = JSON.parse(this.responseText);
+							for (i in main_sections.sections)
+							{
+								header# = main_sections.sections[i].header_id;
+								section_header# = main_sections.sections[i].h2_id;
+								h2_classes = main_sections.sections[i].h2_class;
+								section_header_text = main_sections.sections[i].h2_text;
+								edit_button# = main_sections.sections[i].input_id;
+								edit_button_class = main_sections.sections[i].input_class;
+								input_edit_type = main_sections.sections[i].input_type;
+								input_edit_value = main_sections.sections[i].input_value;
+								input_edit_onclick = main_sections.sections[i].input_onclick;
+								input_edit_style = main_sections.sections[i].input_style;
+								div# = main_sections.sections[i].div_id;
+								p# = main_sections.sections[i].p_id;
+								p_classes = main_sections.sections[i].p_class;
+								section_text = main_sections.sections[i].p_text;
+								txt =
+									`<header id="${header#}">
+										<h2 id="${section_header#}" class="${h2_classes}">${section_header_text}</h2>
+										<input id="${edit_button#}" class="${edit_button_class}" type="${input_edit_type}" value="${input_edit_value}" onclick="${input_edit_onclick}" style="${input_edit_style};"/>
+									</header>
+									<div id="${div#}">
+										<p id="${p#}" class="${p_classes}">${section_text}</p>
+									</div>`
+							}
+							document.getElementById("main_content").appendChild(txt);
+						}
+					};
+					xmlhttp.open("GET", "whatever_the_php_file_is_called.php", true);
+					xmlhttp.send();
+				</script>
+			</div>
+
+			<div>
+				<!--Add a button to call the JavaScript to save the users edits-->
+				<input id="save_button" class="save_button" type="button" value="Save Changes" onclick="saveEdits()" style="display:none;"/>
+				<!--Add a button to call the JavaScript to delete sections-->
+				<input id="remove_section_button" class="remove_section_button" type="button" value="Remove Section" onclick="delete_section()" style="display:none;"/>
+			</div>
+
+			<!--Once the user edited the element they can press this button to save their changes.-->
+			<!--Also include an element that provides confirmation that the changes have been saved-->
+			<div  id="update" style="display:none;">
+			</div>
+
+			<div>
+				<input id="add_section_button" class="user_member user_admin_exec" type="button" value="Add New Section" onclick="create_new_section()" style="display:none;"/>
+			</div>
+		</div>
+
+
+		<!--This form is for simulating user classifications-->
+		<form name="form1">
+			<div>
+				<span>
+					This selection simulates the value passed from the server. When changed the elements with the matching classes are shown or hidden.
+				</span>
+			</div>
+			<p>
+				<span>
+					<input type="radio" class="serverVal" id="usrType1"  name="usrType" value=".user_normal" checked="1" onclick="permissions('user_normal')" />
+					<label for="usrType1">
+						Normal User
+					</label>
+				</span>
+				<span>
+					<input type="radio" class="serverVal" id="usrType2"  name="usrType" value=".user_member" onclick="permissions('user_member')"/>
+					<label for="usrType2">
+						Member
+					</label>
+				</span>
+				<span>
+					<input type="radio" class="serverVal" id="usrType3"  name="usrType" value=".user_admin_exec" onclick="permissions('user_admin_exec')"/>
+					<label for="usrType3">
+						Admin/Exec
+					</label>
+				</span>
+			</p>
+		</form>
+	</body>
+</html>
