@@ -27,20 +27,20 @@
 		//https://stackoverflow.com/questions/6902128/getting-data-from-the-url-in-php
 		
 		$conn = getDatabase();
-		$retval = new \stdClass();
+		$response = new \stdClass();
 		
 		if(mysqli_connect_errno($conn))
 		{
-			$retval->text = "MySqli connect error";
+			$response->text = "MySqli connect error";
 		}
 		else
 		{
 			//SELECT `title` FROM `Pages` WHERE `id` = 3 AND `access` <= 42
-			$stmt = $conn->prepare("SELECT title FROM Pages WHERE id = ? AND access <= ? ");
+			$stmt = $conn->prepare("SELECT title, id FROM Pages WHERE id = ? AND access <= ? ");
 			$stmt->bind_param("ii", $id, $userAccess);
 			$stmt->execute();
 			
-			$stmt->bind_result($title);
+			$stmt->bind_result($title, $pageID);
 			$stmt->store_result();
 		
 			if($stmt->num_rows() < 1)
@@ -53,19 +53,38 @@
 									//access[]
 								//sections[] = https://stackoverflow.com/questions/8612190/array-of-php-objects
 				$response->title = array();
-				$response->access = array();
+				$response->pageId = array();
 				$response->sections = array();
 				
 				while($stmt->fetch())
 				{
 					$response->title[] = $title;
-					$stmtSections = $conn->prepare(SELECT 
+					$response->pageId[] = $pageID;
+					$stmtSections = $conn->prepare("SELECT rank, heading, content, pic_loc, caption FROM Sections WHERE page_id = ? ");
+					$stmtSections->bind_param("i", $pageID);
 					
 					$stmtSections->execute();
 					
-					$stmt->bind_result($
-				
-				//$response->sections[] = ;
+					$stmtSections->bind_result($rank, $heading, $content, $pic_loc, $caption);
+					$stmtSections->store_result();
+					if($stmtSections->num_rows() < 1)
+					{
+						
+					}
+					else
+					{
+						while($stmtSections->fetch())
+						{
+							$section = new \stdClass();
+							$section->rank = $rank;
+							$section->heading = $heading;
+							$section->content = $content;
+							$section->pic_loc = $pic_loc;
+							$section->caption = $caption;
+							
+							$response->sections[] = $section;
+						}
+					}
 				}
 			}
 		}
