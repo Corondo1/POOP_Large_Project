@@ -2,17 +2,17 @@
 //This is the  script that will process saving the user edits, it goes in the head
 function saveEdits()
 {
-  // get the editable element
-  var editElem1 = document.getElementById("main_header");
-  var editElem2 = document.getElementsByClassName('edit_section');
+  // get the editable elements
+  //var editElem1 = document.getElementById("main_header");
+  //var editElem2 = document.getElementsByClassName('edit_section');
 
   // get the edited element content
-  var userVersion1 = editElem1.innerHTML;
-  var userVersion2 = editElem2.innerHTML;
+  //var userVersion1 = editElem1.innerHTML;
+  //var userVersion2 = editElem2.innerHTML;
 
   // save the content to local storage
-  localStorage.userEdits = userVersion1;
-  localStorage.userEdits = userVersion2;
+  //localStorage.userEdits = userVersion1;
+  //localStorage.userEdits = userVersion2;
 
   // Make the content uneditable again
   document.getElementById("main_header").contentEditable = "false";
@@ -37,9 +37,48 @@ function saveEdits()
     text_to_change[i].innerHTML = section_header;
   }
 
+  // Send the updated sections to the server
+  var index = 0, updated_sections, xmlhttp, page = "";
+  var section_text = "", section_title = "";
+  var list_of_sections = document.getElementsByClassName("edit_section");
+  var num_of_sections = (list_of_sections.length)/2;
+  var page_title = document.getElementById("main_header").innerHTML;
+  var page_information = document.getElementById("main_header_section").innerHTML;
+  page +=
+    `{
+        page_title: ${page_title},
+        page_information: ${page_information},
+        sections:[`;
+  for (var i=0; i<num_of_sections; i++)
+  {
+    index = i+1;
+    section_title = document.getElementById('section_header'.concat(index)).innerHTML;
+    section_text = document.getElementById('p'.concat(index)).innerHTML;
+    page +=
+          `{"index":${index},"section_title":${section_title},"section_text":${section_text}}`;
+    if (index<num_of_sections)
+    {
+      page += `,`;
+    }
+  }
+  page += `]}`;
+  updated_sections = JSON.stringify(page);
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function()
+  {
+    /*if (this.readyState == 4 && this.status == 200)
+    {
+
+    }*/
+  };
+  xmlhttp.open("POST", "page_test.JSON", true);
+  xmlhttp.setRequestHeader("update_sections", "update");
+  xmlhttp.send(updated_sections);
+
   // Show the user a confirmation for 3 seconds
   document.getElementById("update").innerHTML="Changes saved!";
-  window.setTimeout(function() {
+  window.setTimeout(function()
+  {
        // This will execute 5 seconds later
        var label = document.getElementById('update');
        if (label != null)
@@ -334,3 +373,41 @@ function delete_section(index_number)
     return;
   }
 }
+
+/*function load_page()
+{
+    var index, section_title, section_header_text, section_text, contents_info = "", section_info = "", i;
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function()
+    {
+      if (this.readyState == 4 && this.status == 200)
+      {
+        var page_info = JSON.parse(this.responseText);
+        for (i in page_info.sections)
+        {
+          index = page_info.sections[i].index;
+          section_title = page_info.sections[i].section_title;
+          section_text = page_info.sections[i].section_text;
+          contents_info +=
+            `<li id="contents_li${index}">
+              <span id="contents_span${index}">
+                <a id="contents_href${index}}" href="#section_header${index}">${section_title}</a>
+              </span>
+            </li>`;
+          section_info +=
+            `<header id="header${index}">
+              <h2 id="section_header${index}" class="edit_section">${section_title}</h2>
+              <input id="edit_button${index}" class="edit_button user_member user_admin_exec" type="button" value="edit" onclick="editSection(${index})" style="display:none;"/>
+            </header>
+            <div id="div${index}">
+              <p id="p${index}" class="edit_section">${section_text}</p>
+            </div>`;
+          document.getElementById("content_list").innerHTML = contents_info;
+          document.getElementById("main_content").innerHTML = section_info;
+        }
+      }
+    };
+    xmlhttp.open("GET", "page_test.JSON", true);
+    xmlhttp.send();
+}*/
