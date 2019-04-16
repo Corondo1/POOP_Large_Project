@@ -16,7 +16,7 @@
 	{
 		$response = new \stdClass();
 		$pageID = $_GET['id'];
-		$access = $_SESSION['access'];
+		$access = $_GET['access'];
 		$response = getPage($pageID, $access);
 		echo json_encode($response);
 		exit();
@@ -45,7 +45,7 @@
 		
 			if($stmt->num_rows() < 1)
 			{
-				$response->text = "Nothing Found";
+				$response->status = "Nothing Found";
 			}
 			else
 			{
@@ -69,7 +69,7 @@
 					$stmtSections->store_result();
 					if($stmtSections->num_rows() < 1)
 					{
-						
+					
 					}
 					else
 					{
