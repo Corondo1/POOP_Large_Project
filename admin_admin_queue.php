@@ -9,11 +9,11 @@
 		{
 			if($_SESSION['access'] > 3)
 			{
-				$response = admin_page_queue();
+				$response = admin_admin_queue();
 			}
 			else
 			{
-				$response->state = 4;
+				$response->state = 4; //Access Denied
 			}
 		}
 		else
@@ -24,7 +24,7 @@
 		echo json_encode($response);
 	}
 	
-	function admin_page_queue()
+	function admin_admin_queue()
 	{
 		$conn = getDatabase();
 		
@@ -35,10 +35,10 @@
 		}
 		else
 		{
-			$stmt = $conn->prepare("SELECT title, id, description, access FROM Pages WHERE access = 2");
+			$stmt = $conn->prepare("SELECT id, name FROM Users WHERE access = 3");
 			$stmt->execute();
 			
-			$stmt->bind_result($title, $id, $description, $access);
+			$stmt->bind_result($id, $name);
 			$stmt->store_result();
 			
 			if($stmt->num_rows() < 1)
@@ -47,21 +47,18 @@
 			}
 			else
 			{
-				$response->pages = array(array());
+				$response->members = array(array());
 				$i = 0;
 				while($stmt->fetch())
 				{
-					$response->pages[$i] = new \stdClass();
-					$response->pages[$i]->id = $id;
-					$response->pages[$i]->title = $title;
-					$response->pages[$i]->description = $description;
-					$response->pages[$i]->access = $access;
+					$response->members[$i] = new \stdClass();
+					$response->members[$i]->id = $id;
+					$response->members[$i]->name = $name;
 					$i++;
 				}
-				$response->state = 1;
+				
 			}
 		}
-		
 		return $response;
 	}
 

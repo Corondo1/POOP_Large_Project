@@ -1,13 +1,15 @@
 <?php
 	include("config.php");
+	try_session();
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$obj = json_decode(file_get_contents('php://input'), true);
 		$response = new \stdClass();
 		$pageID = $obj['id'];
-		$access = $obj['access'];
+		$access = $_SESSION['access'];
 		$response = getPage($pageID, $access);
+		//$response->AccessTest = $_SESSION[$usernameDB];
 		echo json_encode($response);
 		exit();
 	}
@@ -16,8 +18,9 @@
 	{
 		$response = new \stdClass();
 		$pageID = $_GET['id'];
-		$access = $_GET['access'];
+		$access = $_SESSION['access'];
 		$response = getPage($pageID, $access);
+		$response->AccessTest = $_SESSION[$usernameDB];
 		echo json_encode($response);
 		exit();
 	}
@@ -25,13 +28,16 @@
 	function getPage($id, $userAccess)
 	{
 		//https://stackoverflow.com/questions/6902128/getting-data-from-the-url-in-php
-		
+		if($_SESSION['access'] == NULL)
+		{
+			$_SESSION['access'] = 0;
+		}
 		$conn = getDatabase();
 		$response = new \stdClass();
 		
 		if(mysqli_connect_errno($conn))
 		{
-			$response->text = "MySqli connect error";
+			$response->state = 3; //"MySqli connect error";
 		}
 		else
 		{
@@ -45,21 +51,19 @@
 		
 			if($stmt->num_rows() < 1)
 			{
-				$response->status = "Nothing Found";
+				$response->state = 0; //"Nothing Found and or access denied";
 			}
 			else
 			{
-								//title[]
-									//access[]
+				$response->state = 1; //"Success, Page found"
 								//sections[] = https://stackoverflow.com/questions/8612190/array-of-php-objects
-				$response->title = array();
-				$response->pageId = array();
+
 				$response->sections = array();
 				
 				while($stmt->fetch())
 				{
-					$response->title[] = $title;
-					$response->pageId[] = $pageID;
+					$response->title = $title;
+					$response->pageId = $pageID;
 					$stmtSections = $conn->prepare("SELECT rank, heading, content, pic_loc, caption FROM Sections WHERE page_id = ? ");
 					$stmtSections->bind_param("i", $pageID);
 					

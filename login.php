@@ -1,7 +1,15 @@
 <?php
 	include("config.php");
-	//session_start();
-	//$_SESSION = array();
+	try_session();
+	/*
+	$ok = session_start();
+	if(!$ok)
+	{
+		session_regenerate_id(true); // replace the Session ID
+		session_start(); 
+	}
+	*/
+	$_SESSION = array();
 	$obj = json_decode(file_get_contents('php://input'), true);
     //var_dump(obj);
 	if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -21,21 +29,20 @@
 		// Successful connection to DB
 		else
 		{			
-			$stmt = $conn->prepare("SELECT name, password FROM Users WHERE name = ?");
+			$stmt = $conn->prepare("SELECT name, password, access FROM Users WHERE name = ?");
 			
 			$stmt->bind_param("s", $usernameInput);
 			
 			$stmt->execute();
 						
-			$stmt->bind_result($usernameDB, $passwordDB);
+			$stmt->bind_result($usernameDB, $passwordDB, $access);
 			$stmt->store_result();
 			
 			// Username doesn't exist
+			//$response->numrow = $stmt->num_rows();
 			if ($stmt->num_rows() < 1)
 			{
-			    $response->username = $usernameDB;
-			    $response->password = $passwordDB;
-			    $response->state = "Incorrect Username";
+				$response->state = 0;  //Fail username not found
 			}
 			else
 			{
@@ -46,20 +53,26 @@
 					{
         			    //$response->username = $usernameDB;
         			    //$response->password = $passwordDB;
-        			    $response->state = "Success";
         			    
-						//$_SESSION['login_user'] = $usernameDB;
+						$response->state = 1; //Success
+        			    
+						$_SESSION['isLoggedIn'] = true;
+						$_SESSION['access'] = $access;
+						
+						//$response->sessionLogin = $_SESSION['isLoggedIn'];
+						//$response->sessionAccess = $_SESSION['access'];
+
 					}
 					else		// Incorrect Password
 					{
 						// Send JSON response
         			    //$response->username = $usernameDB;
         			    //$response->password = $passwordDB;
-        			    $response->state = "Incorrect Password.";
+							
+						$response->state = 2; //Inccorrect password
 					}
 				}
 			}
-			$stmt->close();
 			$conn->close();
 		}
 		

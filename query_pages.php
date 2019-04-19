@@ -4,41 +4,19 @@
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
-		$response = new \stdClass();
-		if($_SESSION['isLoggedIn'])
-		{
-			if($_SESSION['access'] > 3)
-			{
-				$response = admin_page_queue();
-			}
-			else
-			{
-				$response->state = 4;
-			}
-		}
-		else
-		{
-			$response->state = 2; //user is not logged in
-		}
-		
-		echo json_encode($response);
-	}
-	
-	function admin_page_queue()
-	{
 		$conn = getDatabase();
 		
 		$response = new \stdClass();
 		if(mysqli_connect_errno($conn))
 		{
-			$response->state = 3; // Error
+			$response->state = 0; // Error
 		}
 		else
 		{
-			$stmt = $conn->prepare("SELECT title, id, description, access FROM Pages WHERE access = 2");
+			$stmt = $conn->prepare("SELECT title, id, description, access, team FROM Pages WHERE access < 2");
 			$stmt->execute();
 			
-			$stmt->bind_result($title, $id, $description, $access);
+			$stmt->bind_result($title, $id, $description, $access, $team);
 			$stmt->store_result();
 			
 			if($stmt->num_rows() < 1)
@@ -56,13 +34,17 @@
 					$response->pages[$i]->title = $title;
 					$response->pages[$i]->description = $description;
 					$response->pages[$i]->access = $access;
+					$response->pages[$i]->team = $team;
 					$i++;
 				}
-				$response->state = 1;
+				
 			}
 		}
 		
-		return $response;
+		echo json_encode($response);
+		exit();
+		
 	}
+
 
 ?>
