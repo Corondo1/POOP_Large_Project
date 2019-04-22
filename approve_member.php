@@ -38,11 +38,11 @@
 		}
 		else
 		{
-			$memberId = $obj['member_id'];
+			$member_name = $obj['member_name'];
 			$access = $obj['access'];
 			
-			$stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
-			$stmt->bind_param("i", $memberId);
+			$stmt = $conn->prepare("SELECT * FROM Users WHERE name = ?");
+			$stmt->bind_param("s", $member_name);
 			$stmt->execute();
 			$stmt->store_result();
 			
@@ -52,8 +52,8 @@
 			}
 			else
 			{
-				$stmtApprove = $conn->prepare("UPDATE Users SET access = ? WHERE id = ?");
-				$stmtApprove->bind_param("ii", $access, $memberId);
+				$stmtApprove = $conn->prepare("UPDATE Users SET access = ? WHERE name = ?");
+				$stmtApprove->bind_param("is", $access, $member_name);
 				if($stmtApprove->execute())
 				{
 					$response->state = 1; // Success in approving page
