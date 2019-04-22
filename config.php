@@ -4,14 +4,13 @@
 		define('DB_SERVER', '127.0.0.1');
 		define('DB_USERNAME', 'poop_default');
 		define('DB_PASSWORD', 'EC6p~$[s,!G+');
-		define('DB_DATABASE', 'poop_Yeet1');
+		define('DB_DATABASE', 'poop_Yeetipedia');
 		$db = mysqli_connect(DB_SERVER,DB_USERNAME,DB_PASSWORD,DB_DATABASE);
 		return $db;
 	}
 	
 	function try_session()
 	{
-		session_save_path();
 		if(ini_get('session.use_cookies') && isset($_COOKIE['PHPSESSID']))
 		{
 			$sessid = $_COOKIE['PHPSESSID'];
