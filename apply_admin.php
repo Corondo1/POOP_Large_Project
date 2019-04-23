@@ -23,7 +23,7 @@
 			else
 			{
 				$stmt = $conn->prepare("UPDATE Users Set access =? WHERE id = ?");
-				$stmt->bind_param("ii", 3, $id);
+				$stmt->bind_param("ii", $a = 3, $id);
 				
 				if($stmt->execute())
 				{

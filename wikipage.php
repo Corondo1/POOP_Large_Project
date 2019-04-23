@@ -28,10 +28,9 @@
 	function getPage($id, $userAccess)
 	{
 		//https://stackoverflow.com/questions/6902128/getting-data-from-the-url-in-php
-		if($_SESSION['access'] == NULL)
-		{
-			$_SESSION['access'] = 0;
-		}
+
+		//$userAccess = $_SESSION['access'] = 500;
+		
 		$conn = getDatabase();
 		$response = new \stdClass();
 		
@@ -42,11 +41,11 @@
 		else
 		{
 			//SELECT `title` FROM `Pages` WHERE `id` = 3 AND `access` <= 42
-			$stmt = $conn->prepare("SELECT title, id FROM Pages WHERE id = ? AND access <= ? ");
+			$stmt = $conn->prepare("SELECT title, id, description, team FROM Pages WHERE id = ? AND access <= ?");
 			$stmt->bind_param("ii", $id, $userAccess);
 			$stmt->execute();
 			
-			$stmt->bind_result($title, $pageID);
+			$stmt->bind_result($title, $pageID, $description, $team);
 			$stmt->store_result();
 		
 			if($stmt->num_rows() < 1)
@@ -64,6 +63,8 @@
 				{
 					$response->title = $title;
 					$response->pageId = $pageID;
+					$response->page_description = $description;
+					$response->team = $team;
 					$stmtSections = $conn->prepare("SELECT rank, heading, content, pic_loc, caption FROM Sections WHERE page_id = ? ");
 					$stmtSections->bind_param("i", $pageID);
 					

@@ -30,7 +30,7 @@
 			}
 			else
 			{
-				$response->state = 4 //Not logged in, access denied;
+				$response->state = 4; //Not logged in, access denied;
 			}
 		}
 		else

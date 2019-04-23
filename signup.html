@@ -22,7 +22,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
   </head>
 
-	<body>
+	<body onload="logged_in(false)">
 		<!--Navigation-->
 			<!--navbar-expand-md-->
 				<!--md is the breakpoint that changes from mobile navigation to the expanded full width navigation-->
@@ -38,7 +38,7 @@
 				<!--Add the logo-->
 					<!--navbar-brand-->
 						<!--Specifies that this will be a logo-->
-				<a class="navbar-brand" href="#">
+				<a class="navbar-brand" href="home.html">
 					<img src="img/yeetipedia_logo_crop.png">
 				</a>
 				<!--data-toggle="collapse"-->
@@ -82,25 +82,26 @@
 						<img src="img/default_user.png">
 					</div>
 
-					<form class="col-12" action="signup.php" method="post">
-						<!--Username field-->
-						<div class="form-group">
-							<input name="username" type="text" class="form-control" placeholder="Enter Username">
-						</div>
-						<!--Password field-->
-						<div class="form-group form-password">
-							<input name="password" type="password" class="form-control" placeholder="Enter Password">
-						</div>
-						<!--Re Enter Password field-->
-						<div class="form-group form-password">
-							<input name="password_confirm" type="password" class="form-control" placeholder="Repeat Password">
-						</div>
-						<!--Signup button-->
-						<button type="submit" class="btn" accesskey="enter">
+					<!--Username field-->
+					<div class="form-group">
+						<input id="nm" name="username" type="text" class="form-control" placeholder="Enter Username">
+					</div>
+					<!--Password field-->
+					<div class="form-group form-password">
+						<input id="pw" name="password" type="password" class="form-control" placeholder="Enter Password">
+					</div>
+					<!--Re Enter Password field-->
+					<div class="form-group form-password">
+						<input id="pwc" name="password_confirm" type="password" class="form-control" placeholder="Repeat Password">
+					</div>
+					<!--Signup button-->
+					<div>
+						<button type="submit" class="btn" accesskey="enter" onclick="signup()">
 							<i class="fas fa-sign-in-alt"></i>
 							Sign Up!
 						</button>
-					</form>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -128,8 +129,8 @@
 				<div class="row text-center">
 					<div class="col-md-12">
 						<hr class="light">
-						<p>Phone number</p>
-						<p>Email</p>
+						<p>555-top-yeet</p>
+						<p>jackyli@knights.ucf.edu</p>
 					</div>
 				</div>
 			</div>

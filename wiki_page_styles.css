@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
 
+#section_img
+{
+
+}
+#picture_div
+{
+  height:390px;
+  background-color:#FFFFFF;
+  margin-top:10px;
+  overflow: hidden;
+}
 html, body
 {
   height: 100%;
@@ -21,6 +32,21 @@ html, body
 .nav-link
 {
   font-size: 1em !important;
+}
+
+footer
+{
+  background-color: #3f3f3f;
+  color: #d5d5d5;
+  padding-top: 2rem;
+}
+
+hr
+{
+  border-top: 1px solid #d5d5d5;
+  width: 75%;
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
 }
 
 header
@@ -51,6 +77,13 @@ header
 {
   display: inline-block;
   margin: 10px;
+}
+
+#upload_image, #add_section_button, #delete_page
+{
+
+  justify-content: center;
+  align-items: center;
 }
 
 /*---------------------------------------------------------------------------*/

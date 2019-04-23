@@ -11,16 +11,17 @@
 		<!--This is a link to the bootstrap css file-->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<!--This is the link to the CSS styles that will run on this page-->
-		<link rel="stylesheet" href="wiki_page_styles.css">
+		<link rel="stylesheet" href="user_styles.css">
 		<!--This is the link to the scripts that will run on this page-->
 		<script src = "scripts.js"></script>
 		<!--This font has the icons for social media-->
 		<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 		<!--This is the link to the JQuery Library
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+		<!--Show or hide elements if logged in-->
   </head>
 
-	<body>
+	<body onload="logged_in(false)">
 		<!--Navigation-->
 			<!--navbar-expand-md-->
 				<!--md is the breakpoint that changes from mobile navigation to the expanded full width navigation-->
@@ -36,7 +37,7 @@
 				<!--Add the logo-->
 					<!--navbar-brand-->
 						<!--Specifies that this will be a logo-->
-				<a class="navbar-brand" href="#">
+				<a class="navbar-brand" href="home.html">
 					<img src="img/yeetipedia_logo_crop.png">
 				</a>
 				<!--data-toggle="collapse"-->
@@ -71,6 +72,33 @@
 				</div>
 			</div>
 		</nav>
+
+		<!--User Interface-->
+		<div>
+			<h2>Request to Become a Member</h2>
+			<button id="member_request" type="button" onclick="request_membership()">Request to become a member!</button>
+		</div>
+		<div>
+			<h2>Request to Become a Admin</h2>
+			<button id="admin_request" type="button" onclick="request_admin()" style="display:none;">Request to become a admin!</button>
+		</div>
+		<div>
+			<h2>Create a New Page</h2>
+			<button id="create_new_page" type="button" onclick="create_new_page()" style="display:none;">Create A New Page!</button>
+		</div>
+
+		<!--Footer-->
+		<footer>
+			<div class="container-fluid padding">
+				<div class="row text-center">
+					<div class="col-md-12">
+						<hr class="light">
+						<p>555-top-yeet</p>
+						<p>jackyli@knights.ucf.edu</p>
+					</div>
+				</div>
+			</div>
+		</footer>
 
 		<!--Other Links for bootstrap-->
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

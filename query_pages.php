@@ -4,6 +4,8 @@
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
+		
+		
 		$conn = getDatabase();
 		
 		$response = new \stdClass();
@@ -13,7 +15,12 @@
 		}
 		else
 		{
-			$stmt = $conn->prepare("SELECT title, id, description, access, team FROM Pages WHERE access < 2");
+			if(!isset($_SESSION['access']))
+			{
+				$_SESSION['access'] = 0;
+			}
+			$stmt = $conn->prepare("SELECT title, id, description, access, team FROM Pages WHERE access <= ? AND access < 2");
+			$stmt->bind_param("i", $_SESSION['access']);
 			$stmt->execute();
 			
 			$stmt->bind_result($title, $id, $description, $access, $team);

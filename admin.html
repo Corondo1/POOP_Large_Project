@@ -22,7 +22,63 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
   </head>
 
-	<body>
+	<body onload="logged_in(false)">
+		<!--This script will get all information that needs to be loaded on the page-->
+		<script>
+			var get_pages = `{"get_pages" : "2"}`;
+			var page_id, page_title, i, contents_info = "";
+			var user_requesting_member = "", user_requesting_admin = "";
+			var member_name, member_id;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					var page = JSON.parse(this.responseText);
+					for (i in page.page_list.pages)
+					{
+						page_id = page.page_list.pages[i].id;
+						page_title = page.page_list.pages[i].title;
+						contents_info +=
+							`<tr position="title_team" scope="row">
+								<td>
+									<a href="https://yeetdog.com/Yeetipedia/wiki_page.html?id=${page_id}&access=2">${page_title}</a>
+								</td>
+							</tr>`;
+					}
+					i=0;
+					for (i in page.member_list.members)
+					{
+						member_name = page.member_list.members[i].name;
+						member_id = page.member_list.members[i].id;
+						user_requesting_member +=
+							`<tr position="title_member" scope="row">
+								<td>${member_name}</td>
+								<td>${member_id}</td>
+							</tr>`;
+					}
+					i=0;
+					for (i in page.admin_list.members)
+					{
+						member_name = page.admin_list.members[i].name;
+						member_id = page.admin_list.members[i].id;
+						user_requesting_admin +=
+							`<tr position="title_member" scope="row">
+								<td>${member_name}</td>
+								<td>${member_id}</td>
+							</tr>`;
+					}
+					document.getElementById("table_body_approve_pages").innerHTML = contents_info;
+					document.getElementById("table_body_approve_member").innerHTML = user_requesting_member;
+					document.getElementById("table_body_approve_admin").innerHTML = user_requesting_admin;
+				}
+			};
+			xmlhttp.open("POST", "admin_page.php", true);
+			xmlhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+			xmlhttp.send();
+		</script>
+
 		<!--Navigation-->
 			<!--navbar-expand-md-->
 				<!--md is the breakpoint that changes from mobile navigation to the expanded full width navigation-->
@@ -38,7 +94,7 @@
 				<!--Add the logo-->
 					<!--navbar-brand-->
 						<!--Specifies that this will be a logo-->
-				<a class="navbar-brand" href="#">
+				<a class="navbar-brand" href="home.html">
 					<img src="img/yeetipedia_logo_crop.png">
 				</a>
 				<!--data-toggle="collapse"-->
@@ -64,59 +120,117 @@
 								<a class="nav-link" href="app.html">Yeet the App</a>
 							</li>
 							<li class="nav-item">
-								<a id="logout_button" class="nav-link" href="home.html">Yeet Out</a>
+								<a id="login_button" class="nav-link" href="login.html">Yeet In</a>
+							</li>
+							<li class="nav-item">
+								<a id="signup_button" class="nav-link" href="signup.html">Become a Yeeter</a>
 							</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 
-		<!--Admin Page-->
-			<!--Should have a stream of pages to accept/decline. The ability to create a new page. The ability to give users admin.-->
-			<!--Side Navigation-->
-			<div class="side-nav">
-				<nav>
-					<ul href="#">
-						<li class="active">
-							<a href="#section_user">
-								<span>
-									<i class="fas fa-user"></i>
-								</span>
-								<span>Users</span>
-							</a>
-						</li>
-						<li>
-							<a href="#section_approve_pages">
-								<span>
-									<i class="fas fa-scroll"></i>
-								</span>
-								<span>Approve Pages</span>
-							</a>
-						</li>
-						<li>
-							<a href="#section_promote_members">
-								<span>
-									<i class="fas fa-credit-card-alt"></i>
-								</span>
-								<span>Promote Members</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+		<!--User Interface-->
+		<div>
+			<h1>Change Specific User Membership Level</h1>
+			<div class="form-group filter container">
+				<input id="change_specific_user_rank" type="text" placeholder="Enter Username to Change">
 			</div>
-			<!--Admin utilities-->
-			<div>
-				<header id="section_user">
-					<h2 id="section_user">
-						Users
-					</h2>
-				</header>
-				<div>
-					<p>
-						New Section Content
-					</p>
-				</div>
+			<div class="filter container">
+				Change Rank to:
+				<select id="select_rank">
+					<option value="1">User</option>
+					<option value="2" >Member</option>
+					<option value="4">Admin</option>
+				</select>
 			</div>
+			<button type="submit" class="btn" onclick="change_user_rank()">
+				<i class="fas fa-sign-in-alt"></i>
+				Submit Change
+			</button>
+		</div>
+
+		<div>
+			<h1>Approve Member Requests</h1>
+			<!--New Users requesting to be members-->
+			<div  class="table-responsive container">
+				<table id="approve_member_table" class="table table-striped table-bordered table-hover table-sm">
+					<thead id="approve_member_head_row" class="thead-dark">
+						<tr>
+							<th scope="col">Member Name</th>
+							<th scope="col">Member ID</th>
+						</tr>
+					</thead>
+
+					<tbody id="table_body_approve_member">
+						<!--Template of the table elements-->
+						<!--
+						<tr position="title_member" scope="row">
+							<td>
+								Member Name
+							</td>
+							<td>Member ID</td>
+						</tr>
+						-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div>
+			<h1>Approve Admin Requests</h1>
+			<div  class="table-responsive container">
+				<table id="approve_admin_table" class="table table-striped table-bordered table-hover table-sm">
+					<thead id="approve_admin_head_row" class="thead-dark">
+						<tr>
+							<th scope="col">Member Name</th>
+							<th scope="col">Member ID</th>
+						</tr>
+					</thead>
+
+					<tbody id="table_body_approve_admin">
+						<!--Template of the table elements-->
+						<!--
+						<tr position="title_member" scope="row">
+							<td>
+								Member Name
+							</td>
+							<td>Member ID</td>
+						</tr>
+						-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div>
+			<h1>Approve Pages</h1>
+			<div  class="table-responsive container">
+				<table id="approve_pages_table" class="table table-striped table-bordered table-hover table-sm">
+					<thead id="approve_pages_head_row" class="thead-dark">
+						<tr>
+							<th scope="col">Title</th>
+						</tr>
+					</thead>
+
+					<tbody id="table_body_approve_pages">
+						<!--Template of the table elements-->
+						<!--
+						<tr position="title_team" scope="row">
+							<td>
+								<a href="link_to_page.html">Title of Page</a>
+							</td>
+						</tr>
+						-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div>
+			<h1>Create a New Page</h1>
+			<button type="button" onclick="create_new_page()">Create A New Page!</button>
+		</div>
 
 		<!--Footer-->
 		<footer>
@@ -124,8 +238,8 @@
 				<div class="row text-center">
 					<div class="col-md-12">
 						<hr class="light">
-						<p>Phone number</p>
-						<p>Email</p>
+						<p>555-top-yeet</p>
+						<p>jackyli@knights.ucf.edu</p>
 					</div>
 				</div>
 			</div>

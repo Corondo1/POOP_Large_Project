@@ -23,6 +23,7 @@
 		$obj = json_decode(file_get_contents('php://input'), true);
 		
 		$response = new \stdClass();
+		$response->obj = $obj;
 		if(mysqli_connect_errno($conn))
 		{
 			$response->state = 3; //"Mysqli connect error";
@@ -43,11 +44,12 @@
 			$stmtUpdatePage = $conn->prepare("UPDATE Pages SET title = ?, description = ?, team = ? WHERE id = ?");
 			$stmtUpdatePage->bind_param("sssi", $pageTitle, $pageDesc, $team, $pageId);
 			
+			/*
 			if($_SESSION['access'] < 4)
 			{
 				$stmtReApprove = $conn->prepare("UPDATE Pages SET access = 2 WHERE id = ?");
 				$stmtReApprove->bind_param("i", $pageId);
-				if(!($stmtReApprove->execute())
+				if(!($stmtReApprove->execute()))
 				{
 					$response->state = 0;
 					$stmtReApprove->close();
@@ -57,6 +59,7 @@
 				}
 				$stmtReApprove->close();
 			}
+			*/
 			if($stmtUpdatePage->execute())
 			{
 				if($stmt->num_rows() < 1)
@@ -81,11 +84,13 @@
 						$section = $obj["sections"][$i];
 						//$response->foundSec[] = $section;
 
-						$stmtSectionAdd = $conn->prepare("INSERT INTO Sections (page_id, rank, heading, content) VALUES (?,?,?,?)");
-						$stmtSectionAdd->bind_param("iiss", $pageId, $rank, $heading, $content);
-						$rank = $i;
+						$stmtSectionAdd = $conn->prepare("INSERT INTO Sections (page_id, rank, heading, content, pic_loc) VALUES (?,?,?,?,?)");
+						$stmtSectionAdd->bind_param("iisss", $pageId, $rank, $heading, $content, $pic_loc);
+						$rank = $section['index'];
 						$heading= $section["section_title"];
 						$content = $section["section_text"];
+						$pic_loc = $section["pic_loc"];
+						
 						$stmtSectionAdd->execute();
 						$stmtSectionAdd->close();
 						$i++;
@@ -96,7 +101,7 @@
 			$stmtUpdatePage->close();
 			$stmt->close();
 		}
-		
+		//$response->conn = $conn;
 		$conn->close();
 		
 		return $response;

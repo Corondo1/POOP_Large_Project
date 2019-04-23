@@ -1,10 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
 
-h1
+#section_img
 {
-  text-align: center;
+
 }
-/*Navbar and Footer*/
+#picture_div
+{
+  height:390px;
+  background-color:#FFFFFF;
+  margin-top:10px;
+  overflow: hidden;
+}
 html, body
 {
   height: 100%;
@@ -28,6 +34,29 @@ html, body
   font-size: 1em !important;
 }
 
+header
+{
+  border-bottom: 1px solid #b4b4b4;
+}
+
+#contents
+{
+  text-align: center;
+}
+
+#contents_box
+{
+  display: table;
+  zoom: 1;
+  padding: 7px
+  border: 1px solid #a2a9b1;
+  background-color: #f8f9fa;
+  font-size: 95%
+  direction: ltr;
+  line-height: 1.6;
+  color: #222222;
+}
+
 footer
 {
   background-color: #3f3f3f;
@@ -43,59 +72,11 @@ hr
   margin-bottom: 1rem;
 }
 
-/*Admin Panel*/
-.side-nav
+/*Puts the headers and edit buttons on the same line*/
+.edit_button, #main_header, .edit_section, .remove_section_button, .save_button
 {
-  position: absolute;
-  background-color: #666;
-  height: 100vh;
-  padding-top: 44px;
-}
-
-.side-nav ul
-{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.side-nav ul li
-{
-  padding: 20px 10px;
-  border-bottom: 1px solid #333;
-}
-
-.side-nav ul li a
-{
-  color: #fff;
-}
-
-.side-nav ul li a i
-{
-  color: #333;
-}
-
-.main-content
-{
-  padding-top: 44px;
-}
-
-/*Submit Button*/
-.btn
-{
-  background-color: #27c2a5;
-  color: #fff;
-  font-size: 19px;
-  padding: 7px 14px;
-  border-radius: 5px;
-  border-bottom: 4px solid #219882;
-  text-allign: center;
-}
-
-.btn:hover, .btn:focus
-{
-  background-color: #25a890!important;
-  border-bottom: 4px solid #25a890!important;
+  display: inline-block;
+  margin: 10px;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -105,42 +86,9 @@ hr
 }
 @media (max-width: 768px)
 {
-  .side-nav
-  {
-    width: 200px;
-  }
-  .side-nav ul li
-  {
-    text-align: left;
-  }
-  .side-nav ul li span:nth-child(2)
-  {
-    display: block;
-  }
-  .side-nav ul li i
-  {
-    font-size: 16px;
-  }
 }
-
 @media (max-width: 576px)
 {
-  .side-nav
-  {
-    width: 15%;
-  }
-  .side-nav ul li span:nth-child(2)
-  {
-    display: none;
-  }
-  .side-nav ul li i
-  {
-    font-size: 26px;
-  }
-  .side-nav ul li
-  {
-    text-align: center;
-  }
 }
 
 /*---Firefox Bug Fix --*/

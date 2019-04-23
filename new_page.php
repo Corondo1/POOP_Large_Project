@@ -1,25 +1,28 @@
 <?php
 	include("config.php");
+	try_session();
 	
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
+		$response = new \stdClass();
 		if(!($_SESSION['isLoggedIn']))
 		{
 			$response->state = 2; //User not logged in
 		}
 
-		$conn = getDataBase();
-		$obj = json_decode(file_get_contents('php://input'), true);
-		
-		$response = new \stdClass();
+		$conn = getDataBase();				
 		if(mysqli_connect_errno($conn))
 		{
 			$response->state = 3; //"Mysqli connect error";
 		}
 		else
 		{
-			$pageTitle = " ";
-			$editorId = $obj["editor_id"];
+			$pageTitle = "DEFAULT_TITLE";
+			if(!isset($_SESSION['id']))
+			{
+				$_SESSION['id'] = 999;
+			}
+			$editorId = $_SESSION['id'];
 			$lastEdit = time();
 			$access = 2;
 			$stmt = $conn->prepare("INSERT INTO Pages (title, editor_id, last_edit, access) VALUES (?,?,?,?)");
